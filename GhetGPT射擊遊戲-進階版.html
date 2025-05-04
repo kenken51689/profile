@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>國軍體驗營：神槍手挑戰</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: black;
+        }
+        #gameCanvas {
+            display: none;
+        }
+        #openingScreen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/MkQ1uOK.jpg') center center/cover no-repeat;
+            filter: brightness(0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 2em;
+        }
+        #subtitle {
+            margin-top: 20px;
+            font-size: 1em;
+            font-weight: normal;
+        }
+        #loading {
+            margin-top: 30px;
+            font-size: 1em;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0% {opacity: 1;}
+            50% {opacity: 0;}
+            100% {opacity: 1;}
+        }
+        #scoreBoard {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div id="openingScreen">
+    國軍體驗營：神槍手挑戰
+    <div id="subtitle">模擬實境狙擊體驗，開始你的訓練！</div>
+    <div id="loading">Loading...</div>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+<div id="scoreBoard">分數：0</div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const scoreBoard = document.getElementById('scoreBoard');
+
+    // 音效
+    const gunshotSound = new Audio('https://www.soundjay.com/mechanical/sounds/mechanical-gunshot-1.mp3');
+    const boomSound = new Audio('https://www.soundjay.com/explosion/explosion-01.mp3');
+
+    // 敵人圖片
+    const sealImage = new Image();
+    sealImage.src = 'https://i.imgur.com/3M7vOTu.png'; // 替代的海豹隊員圖
+
+    let score = 0;
+    let mouseX = canvas.width / 2;
+    let mouseY = canvas.height / 2;
+
+    let enemy = {
+        x: Math.random() * (canvas.width - 80),
+        y: Math.random() * (canvas.height - 150) + 50,
+        width: 60,
+        height: 60,
+        dx: 2 * (Math.random() > 0.5 ? 1 : -1),
+        alive: true
+    };
+
+    function drawCrosshair(x, y) {
+        ctx.beginPath();
+        ctx.moveTo(x - 10, y);
+        ctx.lineTo(x + 10, y);
+        ctx.moveTo(x, y - 10);
+        ctx.lineTo(x, y + 10);
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    }
+
+    function drawEnemy() {
+        if (enemy.alive) {
+            ctx.drawImage(sealImage, enemy.x, enemy.y, enemy.width, enemy.height);
+        }
+    }
+
+    function updateEnemy() {
+        if (enemy.alive) {
+            enemy.x += enemy.dx;
+            if (enemy.x <= 0 || enemy.x >= canvas.width - enemy.width) {
+                enemy.dx *= -1;
+            }
+        }
+    }
+
+    canvas.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+
+    canvas.addEventListener('click', () => {
+        gunshotSound.currentTime = 0;
+        gunshotSound.play();
+        if (enemy.alive && mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
+            mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
+            boomSound.currentTime = 0;
+            boomSound.play();
+            score++;
+            scoreBoard.innerText = `分數：${score}`;
+            enemy.alive = false;
+            setTimeout(resetEnemy, 500);
+            if (score === 30) {
+                setTimeout(() => {
+                    alert('Seal Sniper King！');
+                }, 600);
+            }
+        }
+    });
+
+    function resetEnemy() {
+        enemy.x = Math.random() * (canvas.width - 80);
+        enemy.y = Math.random() * (canvas.height - 150) + 50;
+        enemy.dx = 2 * (Math.random() > 0.5 ? 1 : -1);
+        enemy.alive = true;
+    }
+
+    function gameLoop() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawEnemy();
+        updateEnemy();
+        drawCrosshair(mouseX, mouseY);
+        requestAnimationFrame(gameLoop);
+    }
+
+    // 開場動畫自動轉場
+    setTimeout(() => {
+        document.getElementById('openingScreen').style.display = 'none';
+        canvas.style.display = 'block';
+        gameLoop();
+        // 生日彩蛋
+        setTimeout(() => {
+            alert('🎂 Happy Birthday Sniper！🎯');
+        }, 1000);
+    }, 2000);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <title>狙擊神槍手：AI海豹隊</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: linear-gradient(#87CEEB, #FFFFFF);
+        }
+        #scoreBoard {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #333;
+            font-family: 'Arial';
+        }
+        #canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="scoreBoard">分數：0</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let score = 0;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const sealImage = new Image();
+        sealImage.src = 'https://i.imgur.com/3M7vOTu.png'; // 使用一張代表海豹隊員的小士兵圖
+
+        const boomSound = new Audio('https://www.soundjay.com/button/beep-07.wav'); // 簡單中彈音效
+
+        let enemy = {
+            x: Math.random() * (canvas.width - 80),
+            y: Math.random() * (canvas.height - 150) + 50,
+            width: 60,
+            height: 60,
+            dx: 2 * (Math.random() > 0.5 ? 1 : -1)
+        };
+
+        function drawEnemy() {
+            ctx.drawImage(sealImage, enemy.x, enemy.y, enemy.width, enemy.height);
+        }
+
+        function updateEnemy() {
+            enemy.x += enemy.dx;
+            if (enemy.x <= 0 || enemy.x >= canvas.width - enemy.width) {
+                enemy.dx *= -1;
+            }
+        }
+
+        function drawCrosshair(x, y) {
+            ctx.beginPath();
+            ctx.moveTo(x - 10, y);
+            ctx.lineTo(x + 10, y);
+            ctx.moveTo(x, y - 10);
+            ctx.lineTo(x, y + 10);
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        let mouseX = canvas.width/2;
+        let mouseY = canvas.height/2;
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        canvas.addEventListener('click', () => {
+            if (
+                mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
+                mouseY >= enemy.y && mouseY <= enemy.y + enemy.height
+            ) {
+                boomSound.play();
+                score++;
+                document.getElementById('scoreBoard').innerText = `分數：${score}`;
+                resetEnemy();
+            }
+        });
+
+        function resetEnemy() {
+            enemy.x = Math.random() * (canvas.width - 80);
+            enemy.y = Math.random() * (canvas.height - 150) + 50;
+            enemy.dx = 2 * (Math.random() > 0.5 ? 1 : -1);
+        }
+
+        function gameLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawEnemy();
+            updateEnemy();
+            drawCrosshair(mouseX, mouseY);
+            requestAnimationFrame(gameLoop);
+        }
+
+        sealImage.onload = () => {
+            gameLoop();
+        }
+    </script>
+</body>
+</html>
