@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>我的個人介紹</title>
+  <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Microsoft JhengHei", sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .intro-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 20px;
+      gap: 30px;
+    }
+
+    img.profile {
+      width: 200px;
+      height: 200px;
+      border-radius: 100px;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    .basic-info {
+      max-width: 400px;
+      font-family: 'ZCOOL KuaiLe', cursive;
+      font-size: 20px;
+      background-color: #fff5f8;
+      padding: 15px 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      line-height: 1.8;
+    }
+
+    .section {
+      margin: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    summary {
+      font-size: 20px;
+      font-weight: bold;
+      padding: 15px;
+      cursor: pointer;
+      color: white;
+    }
+
+    .section-content {
+      padding: 15px;
+      background-color: #fff;
+      color: #333;
+    }
+
+    iframe {
+      width: 100%;
+      height: 400px;
+      border: none;
+      margin-top: 10px;
+    }
+
+    .red    summary { background-color: #b71c1c; }
+    .orange summary { background-color: #e65100; }
+    .yellow summary { background-color: #f9a825; }
+    .blue   summary { background-color: #1565c0; }
+    .green  summary { background-color: #2e7d32; }
+    .purple summary { background-color: #6a1b9a; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>我的個人介紹</h1>
+  </header>
+
+  <div class="intro-container">
+    <img src="個人照8張.png" alt="大頭照" class="profile">
+    <div class="basic-info">
+      姓名：Alex<br>
+      職業：儀校工程師<br>
+      專長：設備可靠度、精準調校<br>
+      興趣：煮飯、羽球、慢跑、旅遊
+    </div>
+  </div>
+
+  <details class="section orange">
+    <summary>作品集</summary>
+    <div class="section-content">
+      <p>以下是我近期開發的遊戲作品，包含基礎與進階版射擊遊戲，以及 AI 對戰的五子棋：</p>
+
+      <strong>🔫 GhetGPT 射擊遊戲：</strong>
+      <iframe src="GhetGPT射擊遊戲.html"></iframe>
+
+      <strong>🎯 GhetGPT 射擊遊戲（進階版）：</strong>
+      <iframe src="GhetGPT射擊遊戲-進階版.html"></iframe>
+
+      <strong>⭕ 五子棋遊戲（對戰 AI KEN）：</strong>
+      <iframe src="五子棋遊戲.html"></iframe>
+    </div>
+  </details>
+
+  <details class="section yellow">
+    <summary>筆記</summary>
+    <div class="section-content">
+      <p>分享我在工作與生活中的筆記，例如設備保養心得、調整參數經驗、學習筆記等等。</p>
+    </div>
+  </details>
+
+  <details class="section blue">
+  <summary>照片</summary>
+  <div class="section-content">
+    <p>這是我最近在校園散步時的畫面：</p>
+    <img src="大學女生.png" alt="大學女生" style="max-width:100%; border-radius:12px; box-shadow: 0 0 10px rgba(0,0,0,0.2); margin-top:10px;">
+  </div>
+</details>
+
+
+
+  <details class="section green">
+    <summary>興趣</summary>
+    <div class="section-content">
+      <p>我喜歡煮飯、打羽球、慢跑，也熱愛旅遊，喜歡探索不同城市的文化與美食。</p>
+    </div>
+  </details>
+
+  <details class="section purple">
+    <summary>影片專區</summary>
+    <div class="section-content">
+      <p>以下是我的介紹影片：</p>
+      <video width="100%" controls>
+        <source src="my-video.mp4" type="video/mp4">
+        您的瀏覽器不支援影片播放。
+      </video>
+    </div>
+  </details>
+
+</body>
+</html>
